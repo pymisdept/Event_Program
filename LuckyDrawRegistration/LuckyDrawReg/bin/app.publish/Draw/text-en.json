@@ -1,0 +1,10 @@
+﻿{
+  "title": "Paul Y. Vaccination COVID-19 Lucky Draw",
+  "span": "The total prize of the lucky draw can be as high as one million Hong Kong dollars. Each lucky staff who win the lottery can get not less than HK$5,000.",
+  "name": "English or Chinese name (as shown on your Hong Kong Identity Card):",
+  "ID": "Staff No. (5 digits):",
+  "HKID": "Hong Kong ID card no. (First 4 letters & digits e.g. A123):",
+  "span2": "I hereby declare that all the information given above is true and correct.",
+  "lang": "中文",
+  "submitBtn": "Submit"
+}
