@@ -1,0 +1,1044 @@
+﻿@using System.Web.Mvc.Html
+@using Projection.Business.Core
+@using System.Web.Mvc.Html
+@using Business
+@using System.Linq
+
+@model UI.ViewModels.PYENG0005ViewModel
+
+
+
+@{
+    Layout = "~/Views/Shared/_Shell.cshtml";
+}
+
+@section pageStyles
+{
+    @Html.Partial("_PageCss")
+    @Styles.Render("~/css/documentoption")
+		
+    <style>
+        [name="pyengSideBar"] {
+            padding-top: 100px !important;
+        }
+
+            [name="pyengSideBar"] [name="closebtn"] {
+                margin-top: 85px !important;
+            }
+
+        #pageContents {
+            margin-top: 70px !important;
+            <!-- height: calc(100vh - 50px); -->
+        }
+
+        .centre.pageWidth span {
+            margin-left: 10px;
+            vertical-align: top;
+
+        }
+
+        .centre.pageWidth .scenario-page-bg {
+            padding: 10px 5px 5px 5px;
+            cursor: pointer;
+        }
+
+            .centre.pageWidth .scenario-page-bg .imgIconHeader {
+                height: 17px;
+                width: 17px;
+            }
+
+            .centre.pageWidth .scenario-page-bg span {
+                font-size: 14pt;
+            }
+			
+			.centre.pageWidth{              
+			  padding-left: 80px;
+			  padding-right: 40px;
+			  width: 90vw;
+			  max-width: 90vw !important;
+            }
+
+        .pyImage {
+            max-height: 100%;
+			width: 100%;
+            max-width: 1920px;
+            cursor: default;
+        }
+
+        /*.centre.pageWidth .imgThumbnail {
+            max-height: 150px;            
+            display: inline-block;
+            height: auto;
+            width: auto;
+        }*/
+
+        .centre.pageWidth .imgThumbnail {
+            height: 150px;            
+        }
+
+        .centre.pageWidth .sam.table {
+            width: 100%;
+        }
+
+            .centre.pageWidth .sam.table .docNo {
+                width: 255px;
+            }
+
+            .centre.pageWidth .sam.table .docSubject {
+            }
+
+            .centre.pageWidth .sam.table .docDate {
+                width: 15%;
+                text-align: center;
+            }
+
+            .centre.pageWidth .sam.table .docAttachments {
+                width: 10%;
+                text-align: center;
+            }
+
+            .centre.pageWidth .sam.table thead th {
+                position: sticky;
+                top: 0;
+                text-align: center;
+            }
+
+            .centre.pageWidth .sam.table tbody td {
+                font-size: 12pt;
+            }
+
+        .centre.pageWidth .tableScroll {
+            /*max-height: 200px;*/
+            overflow: hidden;
+        }
+
+        .centre.pageWidth .photoTable {
+            height: 180px;
+            overflow-x: auto;
+        }
+
+            .centre.pageWidth .photoTable .ui.very.basic.table {
+                width: 100%;
+            }
+
+                .centre.pageWidth .photoTable .ui.very.basic.table td {
+                    text-align: center;
+                    vertical-align: middle;
+                }
+
+        .tsSummary {
+            margin-top: 10px;
+            width: 100%;
+            text-align: center
+        }
+
+            .tsSummary thead th {
+                background-color: #EFEFEF;
+            }
+
+            .tsSummary tbody tr {
+                margin-top: 5px;
+            }
+
+        .value {
+            font-size: 2em !important;
+        }
+
+        .lbl.stat.text {
+            font-size: 12px;
+        }
+
+        .ui.column.center.aligned.grid.tsTitle {
+            text-align: center;
+            background-color: lightgrey;
+            padding: 5px !important;
+            margin-top: 0px !important;
+            font-weight: bold;
+        }
+
+        .grey-background {
+            height: calc(100vh - 85px);
+        }
+
+        .loadMore {
+            width: 100%;
+            text-align: right;
+            font-weight: bold;
+            padding-right: 10px;
+        }
+
+        .actionBar .project-filter {
+            float: right;
+            margin-top: 7px !important;
+            <!-- margin-right: 20px; -->
+            width: 250px;
+        }
+		
+		.shortcutbar {
+			display: inline-block;
+		}
+
+        @@media only screen and (max-width: 1366px) {
+            .centre.pageWidth {
+                width: 100vw !important;
+				max-width: 100vw !important;
+            }
+			
+			.shortcutbar {
+				display: none;
+			}
+        }
+		
+		
+		/* Slideshow container */
+		.slideshow-container {		  
+		  position: relative;
+		  margin: auto;
+		}
+
+		/* Hide the images by default */
+		.mySlides {
+		  display: none;
+		}
+
+		/* Next & previous buttons */
+		.prev, .next {
+		  cursor: pointer;
+		  position: absolute;
+		  top: 50%;
+		  width: auto;
+		  margin-top: -22px;
+		  padding: 16px;
+		  color: white;
+		  font-weight: bold;
+		  font-size: 18px;
+		  transition: 0.6s ease;
+		  border-radius: 0 3px 3px 0;
+		  user-select: none;
+		}
+
+		/* Position the "next button" to the right */
+		.next {
+		  right: 0;
+		  border-radius: 3px 0 0 3px;
+		}
+
+		/* On hover, add a black background color with a little bit see-through */
+		.prev:hover, .next:hover {
+		  background-color: rgba(0,0,0,0.8);
+		}
+		
+		/* The dots/bullets/indicators */
+		.dot {
+		  cursor: pointer;
+		  height: 15px;
+		  width: 15px;
+		  margin: 0 2px;
+		  background-color: #bbb;
+		  border-radius: 50%;
+		  display: inline-block;
+		  transition: background-color 0.6s ease;
+		}
+		
+		.dot:hover {
+		  background-color: #717171;
+		}
+
+		.slideractive {
+		  background-color: #717171;
+		}
+		
+		.card {
+			 box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);  
+			 transition: 0.3s; 
+			 background-color: white;
+			 border-radius: 5px;
+		}
+				
+		.greenline {
+			background-color: green;
+			border: solid 1px green;
+			width: 50px;
+			height: 1px;
+			margin: 0 0 20px;
+		}
+		
+		.row {
+			margin-top: 5px;
+			margin-bottom: 5px;
+		}
+		
+		.normalfont{
+			font-size: 12pt;
+			color: #007bff;
+		}
+		
+		.metafont{
+			font-size: 12pt;
+			color: grey;
+		}
+		
+		.pyedate{
+			color: #fff !important;
+			font-size: 140px;
+			display: inline-block;
+			line-height: 100%;
+			overflow: hidden;
+			text-transform: uppercase;
+			background: transparent !important;
+			width: 100%;
+			background: rgb(42, 47, 67);
+			color: rgb(84, 94, 134);
+			text-shadow: rgb(29, 33, 47) 1px 1px 0px, rgb(29, 33, 47) 2px 2px 0px, rgb(29, 33, 47) 3px 3px 0px, rgb(29, 33, 47) 4px 4px 0px, rgb(29, 33, 47) 5px 5px 0px, rgb(29, 33, 47) 6px 6px 0px, rgb(29, 33, 47) 7px 7px 0px, rgb(29, 33, 47) 8px 8px 0px, rgb(29, 33, 47) 9px 9px 0px, rgb(29, 33, 47) 10px 10px 0px, rgb(29, 33, 47) 11px 11px 0px, rgb(29, 33, 47) 12px 12px 0px, rgb(29, 33, 47) 13px 13px 0px, rgb(29, 33, 47) 14px 14px 0px, rgb(29, 33, 47) 15px 15px 0px, rgb(29, 33, 47) 16px 16px 0px, rgb(29, 33, 47) 17px 17px 0px, rgb(29, 33, 47) 18px 18px 0px, rgb(29, 33, 47) 19px 19px 0px, rgb(29, 33, 47) 20px 20px 0px, rgb(29, 33, 47) 21px 21px 0px, rgb(29, 33, 47) 22px 22px 0px, rgb(29, 33, 47) 23px 23px 0px, rgb(29, 33, 47) 24px 24px 0px, rgb(29, 33, 47) 25px 25px 0px, rgb(29, 33, 47) 26px 26px 0px, rgb(29, 33, 47) 27px 27px 0px, rgb(29, 33, 47) 28px 28px 0px, rgb(29, 33, 47) 29px 29px 0px, rgb(29, 33, 47) 30px 30px 0px, rgb(29, 33, 47) 31px 31px 0px, rgb(29, 33, 47) 32px 32px 0px, rgb(29, 33, 47) 33px 33px 0px, rgb(29, 33, 47) 34px 34px 0px, rgb(29, 33, 47) 35px 35px 0px, rgb(29, 33, 47) 36px 36px 0px, rgb(29, 33, 47) 37px 37px 0px, rgb(29, 33, 47) 38px 38px 0px, rgb(29, 33, 47) 39px 39px 0px, rgb(29, 33, 47) 40px 40px 0px, rgb(29, 33, 47) 41px 41px 0px, rgb(29, 33, 47) 42px 42px 0px, rgb(29, 33, 47) 43px 43px 0px, rgb(29, 33, 47) 44px 44px 0px, rgb(29, 33, 47) 45px 45px 0px, rgb(29, 33, 47) 46px 46px 0px, rgb(29, 33, 47) 47px 47px 0px, rgb(29, 33, 47) 48px 48px 0px, rgb(29, 33, 47) 49px 49px 0px, rgb(29, 33, 47) 50px 50px 0px, rgb(29, 33, 47) 51px 51px 0px, rgb(29, 33, 47) 52px 52px 0px, rgb(29, 33, 47) 53px 53px 0px, rgb(29, 33, 47) 54px 54px 0px, rgb(29, 33, 47) 55px 55px 0px, rgb(29, 33, 47) 56px 56px 0px, rgb(29, 33, 47) 57px 57px 0px, rgb(29, 33, 47) 58px 58px 0px, rgb(29, 33, 47) 59px 59px 0px, rgb(29, 33, 47) 60px 60px 0px, rgb(29, 33, 47) 61px 61px 0px, rgb(29, 33, 47) 62px 62px 0px, rgb(29, 33, 47) 63px 63px 0px, rgb(29, 33, 47) 64px 64px 0px, rgb(29, 33, 47) 65px 65px 0px, rgb(29, 33, 47) 66px 66px 0px, rgb(29, 33, 47) 67px 67px 0px, rgb(29, 33, 47) 68px 68px 0px, rgb(29, 33, 47) 69px 69px 0px, rgb(29, 33, 47) 70px 70px 0px, rgb(29, 33, 47) 71px 71px 0px, rgb(29, 33, 47) 72px 72px 0px, rgb(29, 33, 47) 73px 73px 0px, rgb(29, 33, 47) 74px 74px 0px, rgb(29, 33, 47) 75px 75px 0px, rgb(29, 33, 47) 76px 76px 0px, rgb(29, 33, 47) 77px 77px 0px, rgb(29, 33, 47) 78px 78px 0px, rgb(29, 33, 47) 79px 79px 0px, rgb(29, 33, 47) 80px 80px 0px, rgb(29, 33, 47) 81px 81px 0px, rgb(29, 33, 47) 82px 82px 0px, rgb(29, 33, 47) 83px 83px 0px, rgb(29, 33, 47) 84px 84px 0px, rgb(29, 33, 47) 85px 85px 0px, rgb(29, 33, 47) 86px 86px 0px, rgb(29, 33, 47) 87px 87px 0px, rgb(29, 33, 47) 88px 88px 0px, rgb(29, 33, 47) 89px 89px 0px, rgb(29, 33, 47) 90px 90px 0px, rgb(29, 33, 47) 91px 91px 0px, rgb(29, 33, 47) 92px 92px 0px, rgb(29, 33, 47) 93px 93px 0px, rgb(29, 33, 47) 94px 94px 0px, rgb(29, 33, 47) 95px 95px 0px, rgb(29, 33, 47) 96px 96px 0px, rgb(29, 33, 47) 97px 97px 0px, rgb(29, 33, 47) 98px 98px 0px, rgb(29, 33, 47) 99px 99px 0px, rgb(29, 33, 47) 100px 100px 0px, rgb(29, 33, 47) 101px 101px 0px, rgb(29, 33, 47) 102px 102px 0px, rgb(29, 33, 47) 103px 103px 0px, rgb(29, 33, 47) 104px 104px 0px, rgb(29, 33, 47) 105px 105px 0px, rgb(29, 33, 47) 106px 106px 0px, rgb(29, 33, 47) 107px 107px 0px, rgb(29, 33, 47) 108px 108px 0px, rgb(29, 33, 47) 109px 109px 0px, rgb(29, 33, 47) 110px 110px 0px, rgb(29, 33, 47) 111px 111px 0px, rgb(29, 33, 47) 112px 112px 0px, rgb(29, 33, 47) 113px 113px 0px, rgb(29, 33, 47) 114px 114px 0px, rgb(29, 33, 47) 115px 115px 0px, rgb(29, 33, 47) 116px 116px 0px, rgb(29, 33, 47) 117px 117px 0px, rgb(29, 33, 47) 118px 118px 0px, rgb(29, 33, 47) 119px 119px 0px, rgb(29, 33, 47) 120px 120px 0px, rgb(29, 33, 47) 121px 121px 0px, rgb(29, 33, 47) 122px 122px 0px, rgb(29, 33, 47) 123px 123px 0px, rgb(29, 33, 47) 124px 124px 0px, rgb(29, 33, 47) 125px 125px 0px, rgb(29, 33, 47) 126px 126px 0px, rgb(29, 33, 47) 127px 127px 0px, rgb(29, 33, 47) 128px 128px 0px, rgb(29, 33, 47) 129px 129px 0px, rgb(29, 33, 47) 130px 130px 0px, rgb(29, 33, 47) 131px 131px 0px, rgb(29, 33, 47) 132px 132px 0px, rgb(29, 33, 47) 133px 133px 0px, rgb(29, 33, 47) 134px 134px 0px, rgb(29, 33, 47) 135px 135px 0px, rgb(29, 33, 47) 136px 136px 0px, rgb(29, 33, 47) 137px 137px 0px, rgb(29, 33, 47) 138px 138px 0px, rgb(29, 33, 47) 139px 139px 0px, rgb(29, 33, 47) 140px 140px 0px, rgb(29, 33, 47) 141px 141px 0px, rgb(29, 33, 47) 142px 142px 0px, rgb(29, 33, 47) 143px 143px 0px, rgb(29, 33, 47) 144px 144px 0px, rgb(29, 33, 47) 145px 145px 0px, rgb(29, 33, 47) 146px 146px 0px, rgb(29, 33, 47) 147px 147px 0px, rgb(29, 33, 47) 148px 148px 0px, rgb(29, 33, 47) 149px 149px 0px, rgb(29, 33, 47) 150px 150px 0px, rgb(29, 33, 47) 151px 151px 0px, rgb(29, 33, 47) 152px 152px 0px, rgb(29, 33, 47) 153px 153px 0px, rgb(29, 33, 47) 154px 154px 0px, rgb(29, 33, 47) 155px 155px 0px, rgb(29, 33, 47) 156px 156px 0px, rgb(29, 33, 47) 157px 157px 0px, rgb(29, 33, 47) 158px 158px 0px, rgb(29, 33, 47) 159px 159px 0px, rgb(29, 33, 47) 160px 160px 0px, rgb(29, 33, 47) 161px 161px 0px, rgb(29, 33, 47) 162px 162px 0px, rgb(29, 33, 47) 163px 163px 0px, rgb(29, 33, 47) 164px 164px 0px, rgb(29, 33, 47) 165px 165px 0px, rgb(29, 33, 47) 166px 166px 0px, rgb(29, 33, 47) 167px 167px 0px, rgb(29, 33, 47) 168px 168px 0px, rgb(29, 33, 47) 169px 169px 0px, rgb(29, 33, 47) 170px 170px 0px, rgb(29, 33, 47) 171px 171px 0px, rgb(29, 33, 47) 172px 172px 0px, rgb(29, 33, 47) 173px 173px 0px, rgb(29, 33, 47) 174px 174px 0px, rgb(29, 33, 47) 175px 175px 0px, rgb(29, 33, 47) 176px 176px 0px, rgb(29, 33, 47) 177px 177px 0px, rgb(29, 33, 47) 178px 178px 0px, rgb(29, 33, 47) 179px 179px 0px;box-shadow: rgba(2, 34, 99, 0.494) 2px 2px 0px, rgba(2, 34, 99, 0.49) 4px 4px 0px, rgba(2, 34, 99, 0.482) 6px 6px 0px, rgba(2, 34, 99, 0.48) 8px 8px 0px, rgba(2, 34, 99, 0.47) 10px 10px 0px, rgba(2, 34, 99, 0.467) 12px 12px 0px, rgba(2, 34, 99, 0.463) 14px 14px 0px, rgba(2, 34, 99, 0.455) 16px 16px 0px, rgba(2, 34, 99, 0.45) 18px 18px 0px, rgba(2, 34, 99, 0.443) 20px 20px 0px, rgba(2, 34, 99, 0.44) 22px 22px 0px, rgba(2, 34, 99, 0.43) 24px 24px 0px, rgba(2, 34, 99, 0.427) 26px 26px 0px, rgba(2, 34, 99, 0.424) 28px 28px 0px, rgba(2, 34, 99, 0.416) 30px 30px 0px, rgba(2, 34, 99, 0.41) 32px 32px 0px, rgba(2, 34, 99, 0.404) 34px 34px 0px, rgba(2, 34, 99, 0.4) 36px 36px 0px, rgba(2, 34, 99, 0.392) 38px 38px 0px, rgba(2, 34, 99, 0.39) 40px 40px 0px, rgba(2, 34, 99, 0.384) 42px 42px 0px, rgba(2, 34, 99, 0.376) 44px 44px 0px, rgba(2, 34, 99, 0.373) 46px 46px 0px, rgba(2, 34, 99, 0.365) 48px 48px 0px, rgba(2, 34, 99, 0.36) 50px 50px 0px, rgba(2, 34, 99, 0.353) 52px 52px 0px, rgba(2, 34, 99, 0.35) 54px 54px 0px, rgba(2, 34, 99, 0.345) 56px 56px 0px, rgba(2, 34, 99, 0.337) 58px 58px 0px, rgba(2, 34, 99, 0.333) 60px 60px 0px, rgba(2, 34, 99, 0.325) 62px 62px 0px, rgba(2, 34, 99, 0.32) 64px 64px 0px, rgba(2, 34, 99, 0.314) 66px 66px 0px, rgba(2, 34, 99, 0.31) 68px 68px 0px, rgba(2, 34, 99, 0.306) 70px 70px 0px, rgba(2, 34, 99, 0.298) 72px 72px 0px, rgba(2, 34, 99, 0.294) 74px 74px 0px, rgba(2, 34, 99, 0.286) 76px 76px 0px, rgba(2, 34, 99, 0.282) 78px 78px 0px, rgba(2, 34, 99, 0.28) 80px 80px 0px, rgba(2, 34, 99, 0.27) 82px 82px 0px, rgba(2, 34, 99, 0.267) 84px 84px 0px, rgba(2, 34, 99, 0.26) 86px 86px 0px, rgba(2, 34, 99, 0.255) 88px 88px 0px, rgba(2, 34, 99, 0.247) 90px 90px 0px, rgba(2, 34, 99, 0.243) 92px 92px 0px, rgba(2, 34, 99, 0.24) 94px 94px 0px, rgba(2, 34, 99, 0.23) 96px 96px 0px, rgba(2, 34, 99, 0.227) 98px 98px 0px, rgba(2, 34, 99, 0.22) 100px 100px 0px, rgba(2, 34, 99, 0.216) 102px 102px 0px, rgba(2, 34, 99, 0.208) 104px 104px 0px, rgba(2, 34, 99, 0.204) 106px 106px 0px, rgba(2, 34, 99, 0.2) 108px 108px 0px, rgba(2, 34, 99, 0.192) 110px 110px 0px, rgba(2, 34, 99, 0.19) 112px 112px 0px, rgba(2, 34, 99, 0.18) 114px 114px 0px, rgba(2, 34, 99, 0.176) 116px 116px 0px, rgba(2, 34, 99, 0.17) 118px 118px 0px, rgba(2, 34, 99, 0.165) 120px 120px 0px, rgba(2, 34, 99, 0.16) 122px 122px 0px, rgba(2, 34, 99, 0.153) 124px 124px 0px, rgba(2, 34, 99, 0.15) 126px 126px 0px, rgba(2, 34, 99, 0.14) 128px 128px 0px, rgba(2, 34, 99, 0.137) 130px 130px 0px, rgba(2, 34, 99, 0.13) 132px 132px 0px, rgba(2, 34, 99, 0.125) 134px 134px 0px, rgba(2, 34, 99, 0.12) 136px 136px 0px, rgba(2, 34, 99, 0.114) 138px 138px 0px, rgba(2, 34, 99, 0.11) 140px 140px 0px, rgba(2, 34, 99, 0.1) 142px 142px 0px, rgba(2, 34, 99, 0.098) 144px 144px 0px, rgba(2, 34, 99, 0.094) 146px 146px 0px, rgba(2, 34, 99, 0.086) 148px 148px 0px, rgba(2, 34, 99, 0.082) 150px 150px 0px, rgba(2, 34, 99, 0.075) 152px 152px 0px, rgba(2, 34, 99, 0.07) 154px 154px 0px, rgba(2, 34, 99, 0.063) 156px 156px 0px, rgba(2, 34, 99, 0.06) 158px 158px 0px, rgba(2, 34, 99, 0.055) 160px 160px 0px, rgba(2, 34, 99, 0.047) 162px 162px 0px, rgba(2, 34, 99, 0.043) 164px 164px 0px, rgba(2, 34, 99, 0.035) 166px 166px 0px, rgba(2, 34, 99, 0.03) 168px 168px 0px, rgba(2, 34, 99, 0.024) 170px 170px 0px, rgba(2, 34, 99, 0.02) 172px 172px 0px, rgba(2, 34, 99, 0.016) 174px 174px 0px, rgba(2, 34, 99, 0.008) 176px 176px 0px, rgba(2, 34, 99, 0.004) 178px 178px 0px, rgba(2, 34, 99, 0) 180px 180px 0px, rgba(2, 34, 99, 0) 182px 182px 0px, rgba(2, 34, 99, 0) 184px 184px 0px, rgba(2, 34, 99, 0) 186px 186px 0px, rgba(2, 34, 99, 0) 188px 188px 0px, rgba(2, 34, 99, 0) 190px 190px 0px, rgba(2, 34, 99, 0) 192px 192px 0px, rgba(2, 34, 99, 0) 194px 194px 0px, rgba(2, 34, 99, 0) 196px 196px 0px, rgba(2, 34, 99, 0) 198px 198px 0px, rgba(2, 34, 99, 0) 200px 200px 0px, rgba(2, 34, 99, 0) 202px 202px 0px, rgba(2, 34, 99, 0) 204px 204px 0px, rgba(2, 34, 99, 0) 206px 206px 0px, rgba(2, 34, 99, 0) 208px 208px 0px, rgba(2, 34, 99, 0) 210px 210px 0px, rgba(2, 34, 99, 0) 212px 212px 0px, rgba(2, 34, 99, 0) 214px 214px 0px, rgba(2, 34, 99, 0) 216px 216px 0px, rgba(2, 34, 99, 0) 218px 218px 0px, rgba(2, 34, 99, 0) 220px 220px 0px, rgba(2, 34, 99, 0) 222px 222px 0px, rgba(2, 34, 99, 0) 224px 224px 0px, rgba(2, 34, 99, 0) 226px 226px 0px, rgba(2, 34, 99, 0) 228px 228px 0px, rgba(2, 34, 99, 0) 230px 230px 0px, rgba(2, 34, 99, 0) 232px 232px 0px, rgba(2, 34, 99, 0) 234px 234px 0px, rgba(2, 34, 99, 0) 236px 236px 0px, rgba(2, 34, 99, 0) 238px 238px 0px, rgba(2, 34, 99, 0) 240px 240px 0px, rgba(2, 34, 99, 0) 242px 242px 0px, rgba(2, 34, 99, 0) 244px 244px 0px, rgba(2, 34, 99, 0) 246px 246px 0px, rgba(2, 34, 99, 0) 248px 248px 0px, rgba(2, 34, 99, 0) 250px 250px 0px, rgba(2, 34, 99, 0) 252px 252px 0px, rgba(2, 34, 99, 0) 254px 254px 0px, rgba(2, 34, 99, 0) 256px 256px 0px, rgba(2, 34, 99, 0) 258px 258px 0px, rgba(2, 34, 99, 0) 260px 260px 0px, rgba(2, 34, 99, 0) 262px 262px 0px, rgba(2, 34, 99, 0) 264px 264px 0px, rgba(2, 34, 99, 0) 266px 266px 0px, rgba(2, 34, 99, 0) 268px 268px 0px, rgba(2, 34, 99, 0) 270px 270px 0px, rgba(2, 34, 99, 0) 272px 272px 0px, rgba(2, 34, 99, 0) 274px 274px 0px, rgba(2, 34, 99, 0) 276px 276px 0px, rgba(2, 34, 99, 0) 278px 278px 0px, rgba(2, 34, 99, 0) 280px 280px 0px, rgba(2, 34, 99, 0) 282px 282px 0px, rgba(2, 34, 99, 0) 284px 284px 0px, rgba(2, 34, 99, 0) 286px 286px 0px, rgba(2, 34, 99, 0) 288px 288px 0px, rgba(2, 34, 99, 0) 290px 290px 0px, rgba(2, 34, 99, 0) 292px 292px 0px, rgba(2, 34, 99, 0) 294px 294px 0px, rgba(2, 34, 99, 0) 296px 296px 0px, rgba(2, 34, 99, 0) 298px 298px 0px, rgba(2, 34, 99, 0) 300px 300px 0px, rgba(2, 34, 99, 0) 302px 302px 0px, rgba(2, 34, 99, 0) 304px 304px 0px, rgba(2, 34, 99, 0) 306px 306px 0px, rgba(2, 34, 99, 0) 308px 308px 0px, rgba(2, 34, 99, 0) 310px 310px 0px, rgba(2, 34, 99, 0) 312px 312px 0px, rgba(2, 34, 99, 0) 314px 314px 0px, rgba(2, 34, 99, 0) 316px 316px 0px, rgba(2, 34, 99, 0) 318px 318px 0px, rgba(2, 34, 99, 0) 320px 320px 0px, rgba(2, 34, 99, 0) 322px 322px 0px, rgba(2, 34, 99, 0) 324px 324px 0px, rgba(2, 34, 99, 0) 326px 326px 0px, rgba(2, 34, 99, 0) 328px 328px 0px, rgba(2, 34, 99, 0) 330px 330px 0px, rgba(2, 34, 99, 0) 332px 332px 0px, rgba(2, 34, 99, 0) 334px 334px 0px, rgba(2, 34, 99, 0) 336px 336px 0px, rgba(2, 34, 99, 0) 338px 338px 0px, rgba(2, 34, 99, 0) 340px 340px 0px, rgba(2, 34, 99, 0) 342px 342px 0px, rgba(2, 34, 99, 0) 344px 344px 0px, rgba(2, 34, 99, 0) 346px 346px 0px, rgba(2, 34, 99, 0) 348px 348px 0px, rgba(2, 34, 99, 0) 350px 350px 0px, rgba(2, 34, 99, 0) 352px 352px 0px, rgba(2, 34, 99, 0) 354px 354px 0px, rgba(2, 34, 99, 0) 356px 356px 0px, rgba(2, 34, 99, 0) 358px 358px 0px rgba(2, 34, 99, 0) 360px 360px 0px
+		}
+		
+		.readA {
+			font-weight: normal;
+			display: inline-block;
+		}
+		
+		.unreadA {
+			font-weight: bold;
+			display: inline-block;
+		}
+		
+		.readB {	
+			border-style: none;
+		}
+		
+		.unreadB {	
+			border-style: none;
+			//border-left: 8px solid #2196F3!important;
+			border-left: 8px solid #21ba45!important;
+		}
+		
+    </style>	
+}
+	
+<div id="page">
+    <div id="pageContents">
+            @Html.Partial("_PYENG0005Menu")
+        <div class="grey-background">
+				<!-- <div class="container"> -->
+				  <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+				  <div class="container-fluid">
+				  <div class="row" style="margin-left: 5px; margin-right: 5px;">
+				  <div class="col-xl-2 col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right: 5px;">
+						<div class="row" >
+							<div class="col-12" style="">
+							<div class="current_day" style="height: 240px;background-color: #2a2f43;color: #fff;font-family: Lato, sans-serif;text-align: center;font-size: 24px;text-transform: uppercase;overflow: hidden; padding-top: -30px; padding-left: -27px;">
+							<div class="day" style="margin-top: 25px;" id="pyemonth"></div>
+							<div class="flat-icon pyedate" id="pyedate"></div>
+							<div class="day" style="font-size: 14pt" id="pyeweek"></div>
+							</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6" style="padding-right: 5px">
+									<div class="card" style=" box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);  transition: 0.3s; padding-left: -27px;">
+										<div class="row">
+											<div class="col-lg-12">
+												<div style="padding: 2px 8px; text-align: center;">
+													 <i class="sun custom orange icon" style="font-size: 2em;"></i>
+												</div>
+											</div>								
+											<div class="col-lg-12" style="padding: 0px; padding-top: 10px; text-align: center">
+													<b><span style="font-size: 14pt" id="w_d_v"></span></b>
+											</div>
+										</div>
+								</div>				
+							</div>
+							<div class="col-6" style="padding-left: 5px">
+								<div class="card" style=" box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);  transition: 0.3s; padding-left: -27px;">
+									<div class="row">
+										<div class="col-lg-12">
+											<div style="padding: 2px 8px; text-align: center;">
+													 <i class="tint custom blue icon" style="font-size: 2em;"></i>
+											</div>									
+										</div>
+										<div class="col-lg-12" style="padding: 0px; padding-top: 10px; text-align: center">
+												<b><span style="font-size: 14pt" id="w_h_v"></span></b>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" >
+							<div class="col-12"  height="20px" style="">
+								
+								<div class="card" style=" transition: 0.3s; padding: 10px;">
+									<div class="row">
+										<div class="col-lg-6">
+											<div style="text-align:center; padding-top:10px">
+												<i class="huge sitemap custom grey icon"></i>
+											</div>
+											<div class="lbl stat text" style="font-size: 10pt;text-align:center">
+													<b>@Language.Get("Workflows")</b>
+											</div>
+											<a href="@Url.Content("~")STAND0128" style="text-decoration: none; font-size: 1em; text-align:center">
+													<div class="value stat stat-font">@Model.WorkflowDue</div>
+											</a>
+										</div>
+										<div class="col-lg-6">
+											<div style="text-align:center; padding-top:10px">
+												<i class="huge alarm custom grey icon"></i>
+											</div>
+											<div class="lbl stat text" style="font-size: 10pt;text-align:center">
+													<b>@Language.Get("Notifications")</b>
+											</div>
+											<a href="@Url.Content("~")STAND0128" style="text-decoration: none;font-size: 1em; text-align:center">
+													<div class="value stat stat-font">@Model.NotifRecent</div>
+											</a>
+										</div>
+										</a>
+									 </div>
+								</div>
+							</div>
+						</div>
+
+						
+<div class="row">
+<div class="col-12">
+<div class="card" style="padding: 10px;">                                                                    
+                             <div style="color:#008282; font-size: 14pt;" >CEO Column 專欄</div>                    
+                             <hr />
+                                           <div class="normalfont">
+                                           <img src="@Url.Content("~")Images/PYIntranet/section_CEO.png" width="100%"></img>
+                                           <br /><br />
+                                           <a data-bind="attr:{id: 'docId-76701' }, click: function(){ $root.bindPopupDocLink(76701) }, event: { contextmenu: $root.bindPopupDocLink }" >
+                                           關愛員工 重視人才 Caring for Our People - Cultivating Talent 
+                                           </a>                                                                                                                                                                                                 
+                                                         <div style="padding-bottom: 10px"></div>
+                                                                        <span class="metafont" style="padding-top: 5px">17 Sep 2021</span>
+                                           </div>
+                                           <hr />
+                             </div>
+</div>
+</div>
+					  
+						<div class="row">
+						<div class="col-12">
+							<div class="card" style="padding: 10px;">					
+								<a href="@Url.Content("~")PYENG0005Results/Register/7" target="_self" style="color:#008282; font-size: 14pt;text-decoration:none"><div style="color:#008282; font-size: 14pt;" >Policies 公司政策</div></a>		
+								<hr />
+								@{
+									if (Model != null)
+									{
+										if (Model.DocsFolder != null)
+										{
+											foreach (var docsFolder in Model.DocsFolder)
+											{
+												int pCnt = 1;
+												if(docsFolder.Code.ToUpper() == "POLI")
+												{
+													foreach (var doc in docsFolder.Documents)
+													{
+														if(@pCnt <= 3)
+														{
+															<div class="normalfont">
+																<a data-bind="attr:{id: 'docId-'+ @doc.Id }, click: function(){ $root.bindPopupDocLink(@doc.Id) }, event: { contextmenu: $root.bindPopupDocLink }" >
+																	@doc.Subject
+																</a>														
+																 @{
+																	if(doc.Attachments.Count > 0)
+																	{
+																		foreach (var attachment in doc.Attachments)
+																			{
+																				<a href="@Url.Content("~")Download/Attachment/@attachment.CmAttachment" target="_blank"
+																				   id="attachment-@attachment.CmAttachment"
+																				   data-bind="event: { mouseover: $root.showThumbnailAttachment, mouseout: $root.hideThumbnailAttachment }" style="text-decoration: none">
+																					<i class="attach custom grey icon" style="font-size: 1em;"></i>
+																				</a>
+																			}
+																	}
+																 }
+																 <div style="padding-bottom: 10px"></div>
+																<span class="metafont" style="padding-top: 5px">@doc.IssuedDate.ToString(Standards.DateFormat)</span>
+																<br />
+																<span class="metafont">@doc.CreatedBy</span>
+															</div>
+															<hr />
+														}
+														pCnt++;
+													}
+												}
+											}
+										}
+									}
+								}
+							</div>
+						</div>
+					  </div>
+					  
+					   <div class="row">
+						<div class="col-12">
+							<div class="card" style="padding: 10px;">					
+								<a href="@Url.Content("~")PYENG0005Results/Register/9" target="_self" style="color:#008282; font-size: 14pt;text-decoration:none"><div style="color:#008282; font-size: 14pt;" >Media 媒體報道</div></a>
+								<hr />
+								@{									
+									if (Model != null)
+									{
+										if (Model.DocsFolder != null)
+										{
+											foreach (var docsFolder in Model.DocsFolder)
+											{
+												if(docsFolder.Code.ToUpper() == "MEDIA")
+												{
+													foreach (var doc in docsFolder.Documents)
+													{
+                                                        
+														<div class="normalfont">
+															<a data-bind="attr:{id: 'docId-'+ @doc.Id }, click: function(){ $root.bindPopupDocLink(@doc.Id) }, event: { contextmenu: $root.bindPopupDocLink }" >
+																@doc.Subject
+															</a>
+															<div style="padding-bottom: 10px"></div>
+															<span class="metafont" style="padding-top: 5px">@doc.IssuedDate.ToString(Standards.DateFormat)</span>
+														</div>
+														<hr />
+													}
+												}
+											}
+										}
+									}
+								}
+							</div>
+						</div>
+					  </div>
+					  
+					  
+					  
+				  </div>
+				  
+				  <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 5px; padding-right: 5px">
+				  <div class="row">
+					<div class="col-12" >
+						<div class="card" style="padding: 10px;">										
+							<div>
+								<span width="200px" style="color:#008282; font-size: 14pt; padding-right: 5px">News 即時新聞</span>
+								<marquee style="width: calc(100% - 200px); vertical-align: middle; font-size: 12pt;"><div class="js-marquee" style="margin-right: 0px; float: left;" id="newsfeed"></div></marquee>	
+							</div>																
+						</div>	
+					</div>
+				  </div>				
+					<div class="row">
+					<div class="col-12">
+					<div class="scenario-page-bg" style="max-width: 1920px">
+                    <div class="slideshow-container" >
+					  <!-- Full-width images with number and caption text -->
+					 <div class="mySlides">
+						<a href="https://pyengineering.zoom.us/j/97312603307" target="_blank"><img class="pyImage" src="@Url.Content("~")Images/PYIntranet/Luckydraw(Vaccine)_bg03_bg3.jpg" style="cursor: pointer;" /></a>
+                            			<div class="text"></div>
+					  </div>
+<!-- 					 <div class="mySlides"> -->
+<!-- 						<a href="https://portal.pyengineering.com/PMIS/STAND0017/Document/76701" target="_blank"><img class="pyImage" src="@Url.Content("~")Images/PYIntranet/Portal Banner_CEO_1.jpg" style="cursor: pointer;" /></a> -->
+<!--                             			<div class="text"></div> -->
+<!-- 					  </div> -->
+
+<!-- 					  <div class="mySlides"> -->
+<!-- 						<a href="@Url.Content("~")Content/PYNews/Vaccination Incentives Programme Summary_v2.pdf?nocache=202109141515" target="_blank"><img class="pyImage" src="@Url.Content("~")Images/PYIntranet/PortalBanner_Vaccine2.jpg" style="cursor: pointer;" /></a> -->
+<!-- 						<div class="text"></div> -->
+<!-- 					  </div> -->
+<!-- 					   -->
+<!-- 					  <div class="mySlides"> -->
+<!-- 						<img class="pyImage" src="@Url.Content("~")Images/PYIntranet/PortalBanner_Vaccine.jpg" /> -->
+<!-- 						<div class="text"></div> -->
+<!-- 					  </div -->
+
+<!-- 					  <div class="mySlides"> -->
+<!-- 						<a href="https://www.leavehomesafe.gov.hk/_files/docs/LeaveHomeSafe-MobileApp.pdf" target="_blank"><img class="pyImage" src="@Url.Content("~")Images/PYIntranet/PortalBanner_LeaveHomeSafe.jpg" style="cursor: pointer;" /></a> -->
+<!-- 						<div class="text"></div> -->
+<!-- 					  </div> -->
+
+<!-- 					  <div class="mySlides"> -->
+<!-- 						<a href="https://portal.pyengineering.com/PMIS/STAND0017/Document/67500" target="_blank"><img class="pyImage" src="@Url.Content("~")Images/PYIntranet/Portal Banner_Soccer01_1.jpg" style="cursor: pointer;" /></a> -->
+<!-- 						<div class="text"></div> -->
+<!-- 					  </div> -->
+<!-- 					   -->
+<!-- 					   <div class="mySlides"> -->
+<!-- 						<a href="https://www.linkedin.com/company/paul-y-engineering-group/" target="_blank"><img class="pyImage" src="@Url.Content("~")Images/PYIntranet/Banner 2_Banner_03_2.jpg" style="cursor: pointer;" /></a> -->
+<!-- 						<div class="text"></div> -->
+<!-- 					  </div> -->
+
+<!-- 					  <div class="mySlides"> -->
+<!-- 						<a href="https://www.youtube.com/watch?v=_U1dyJAbt_M" target="_blank"><img class="pyImage" src="@Url.Content("~")Images/PYIntranet/PortalBanner_TKO.jpg" style="cursor: pointer;" /></a> -->
+<!-- 						<div class="text"></div> -->
+<!-- 					  </div> -->
+
+<!-- 					  <div class="mySlides"> -->
+<!-- 						<img class="pyImage" src="@Url.Content("~")Images/PYIntranet/PortalBanner_HKU_MiC.jpg" /> -->
+<!-- 						<div class="text"></div> -->
+<!-- 					  </div> -->
+
+<!-- 					  <div class="mySlides"> -->
+<!-- 						<img class="pyImage" src="@Url.Content("~")Images/PYIntranet/PortalBanner_FL.jpg" /> -->
+<!-- 						<div class="text"></div> -->
+<!-- 					  </div> -->
+
+<!-- 					  <div class="mySlides"> -->
+<!-- 						<img class="pyImage" src="@Url.Content("~")Images/PYIntranet/Banner 7_Portal Banner- map02_1.jpg" /> -->
+<!-- 						<div class="text"></div> -->
+<!-- 					  </div> -->
+<!-- 					   -->
+<!-- 					  <div class="mySlides"> -->
+<!-- 						<img class="pyImage" src="@Url.Content("~")Images/PYIntranet/PortalBanner_AMPD.jpg" /> -->
+<!-- 						<div class="text"></div> -->
+<!-- 					  </div> -->
+
+<!-- 					  <div class="mySlides"> -->
+<!-- 						<img class="pyImage" src="@Url.Content("~")Images/PYIntranet/Banner 9_PortalBanner_IR21_01_1.jpg" /> -->
+<!-- 						<div class="text"></div> -->
+<!-- 					  </div> -->
+
+<!-- 					   --><!-- Next and previous buttons -->
+<!-- 					  <a class="prev" onclick="plusSlides(-1)">&#10094;</a> -->
+<!-- 					  <a class="next" onclick="plusSlides(1)">&#10095;</a> -->
+					</div>
+					<br/>
+					<!-- The dots/circles -->
+					<div style="text-align:center">
+<!-- 						  <span class="dot" onclick="currentSlide(1)"></span> -->
+<!-- 						  <span class="dot" onclick="currentSlide(2)"></span> -->
+<!-- 						  <span class="dot" onclick="currentSlide(3)"></span> -->
+<!-- 						  <span class="dot" onclick="currentSlide(4)"></span> -->
+<!-- 						  <span class="dot" onclick="currentSlide(5)"></span> -->
+<!-- 						  <span class="dot" onclick="currentSlide(6)"></span> -->
+<!-- 						  <span class="dot" onclick="currentSlide(7)"></span> -->
+<!-- 						  <span class="dot" onclick="currentSlide(8)"></span> -->
+<!-- 						  <span class="dot" onclick="currentSlide(9)"></span> -->
+<!-- 						  <span class="dot" onclick="currentSlide(10)"></span> -->
+<!-- 						  <span class="dot" onclick="currentSlide(11)"></span> -->
+					</div>
+					
+			  
+			  <script>
+					var slideIndex = 0;
+					showSlides();
+
+					// Next/previous controls
+					function plusSlides(n) {
+					  goToSlide(slideIndex += n);
+					}
+
+					// Thumbnail image controls
+					function currentSlide(n) {
+					  goToSlide(slideIndex = n);
+					}
+
+					function goToSlide(n) {
+					  var i;
+					  var slides = document.getElementsByClassName("mySlides");
+					  var dots = document.getElementsByClassName("dot");
+					  if (n > slides.length) {slideIndex = 1}
+					  if (n < 1) {slideIndex = slides.length}
+					  for (i = 0; i < slides.length; i++) {
+						  slides[i].style.display = "none";
+					  }
+					  for (i = 0; i < dots.length; i++) {
+						  dots[i].className = dots[i].className.replace(" slideractive", "");
+					  }
+					  slides[slideIndex-1].style.display = "block";
+					  dots[slideIndex-1].className += " slideractive";
+					}
+					
+															
+					function showSlides() {
+					  var i;
+					  var slides = document.getElementsByClassName("mySlides");
+					  var dots = document.getElementsByClassName("dot");
+					  for (i = 0; i < slides.length; i++) {
+						slides[i].style.display = "none";  
+					  }
+					  slideIndex +=1;
+					  if (slideIndex > slides.length) {slideIndex = 1}    
+					  for (i = 0; i < dots.length; i++) {
+						dots[i].className = dots[i].className.replace(" slideractive", "");
+					  }
+					  slides[slideIndex-1].style.display = "block";  
+					  dots[slideIndex-1].className += " slideractive";
+					  setTimeout(showSlides, 20000); // Change image every 20 seconds
+					}
+				</script>	
+                </div>
+					</div>
+				</div>
+				<div class="row">
+				<div class="col-12">
+				<div class="card" style="padding: 10px">								
+						<div style="color:#008282; font-size: 14pt;">					
+						<a href="@Url.Content("~")PYENG0005Results/Register/8" target="_self" style="color:#008282; font-size: 14pt;text-decoration:none"><span>Photo Album 活動相冊</span></a>
+						</div>											
+							<hr />	
+						<div class="block-holder" style=" width: 100%; display: -webkit-box;    display: -ms-flexbox;    display: -webkit-flex;    display: flex;    flex-wrap: wrap;    justify-content: center;">
+							@{
+								if (Model != null)
+								{
+									if (Model.DocsFolder != null)
+									{
+									
+										var toShowPhoto = true;
+										foreach (var docsFolder in Model.DocsFolder)
+										{																
+											if(docsFolder.Code.ToUpper() == "PHO" && toShowPhoto)
+											{
+												int dCnt = 1;
+												toShowPhoto = false;
+												foreach (var doc in docsFolder.Documents)
+                                                {
+													if(@dCnt <= 3)
+													{
+														if (doc.Attachments.Count > 0)
+														{
+															int iCnt = 1;
+															foreach (var attachment in doc.Attachments)
+															{
+																if(@iCnt == 1)
+																{
+																	<div class="block animated js-animated fadeInUp" data-animation="fadeInUp" data-scrolltop="1300" data-delay="500" style=" margin-left: 5px;  margin-right: 5px; width: calc(33% - 10px);padding: 14px 20px; background-color: #27abe2!important;font-size: 14pt; color: white">
+																	<div class="block-content photoTable">
+																		<a data-bind="attr:{id: 'docId-'+ @doc.Id }, click: function(){ $root.bindPopupDocLink(@doc.Id) }, event: { contextmenu: $root.bindPopupDocLink }">
+																				<p style="height: 55px" style="color: white; font-size: 14pt">@doc.Subject</p>
+																		</a>
+																		<br />
+																		<br />
+																		<div class="photoTable">
+																			<table class="ui very basic table">
+																				<tr>
+																					<td>
+																						<a href="@Url.Content("~")Download/Attachment/@attachment.CmAttachment" data-lightbox="@doc.DocumentNo">
+																							<img class="imgThumbnail" src="@Url.Content("~")Download/Attachment/@attachment.CmAttachment" style="width: 100%" >
+																						</a> 
+																					</td>
+																				</tr>
+																			</table>
+																		</div>
+																	</div>
+																	</div>
+																}
+																else
+																{
+																	<div class="photoTable" style="display: none">
+																		<table class="ui very basic table">
+																			<tr>
+																				<td>
+																					<a href="@Url.Content("~")Download/Attachment/@attachment.CmAttachment" data-lightbox="@doc.DocumentNo"></a> 
+																				</td>
+																			</tr>
+																		</table>
+																	</div>
+																}
+																iCnt++;
+															}
+														}					
+													}
+													dCnt++;
+												}
+											}
+										}
+									}
+								}
+							}
+							</div>
+						</div>	
+				</div>
+				</div>
+				<div class="row">
+				  <div class="col-12">
+					<div class="card" style="padding: 10px;">		
+						<div class="row">
+						  <div class="col-6">
+							<div style="color:#008282; font-size: 14pt;">					
+							<a href="@Url.Content("~")PYENG0005Results/Register/1" target="_self" style="color:#008282; font-size: 14pt;text-decoration:none"><span>Annoucement 通告</span></a>
+							</div>						
+							<hr />
+							@{
+								if (Model != null)
+								{
+									if (Model.DocsFolder != null)
+									{
+										foreach (var docsFolder in Model.DocsFolder)
+										{				
+											if(docsFolder.Code.ToUpper() == "ANC")
+											{									
+												foreach (var doc in docsFolder.Documents)
+                                                {		
+														int processedValue = 0;
+                                                        string borderClass = string.Empty;
+														string anchorClass = string.Empty;
+														
+                                              
+                                                          docsFolder.ProcessedList.TryGetValue(doc.Id, out processedValue);
+														  
+                                                          if (processedValue > 0)
+                                                          {
+                                                            borderClass = "readB";
+															anchorClass = "readA";
+                                                          }
+														  else
+														  {			  
+															borderClass = "unreadB";
+															anchorClass = "unreadA";
+														  }
+														  
+														<div class="normalfont @borderClass" id="btag-@doc.Id">
+															<div style="padding-left: 10px">
+																<a data-bind="attr:{id: 'docId-'+ @doc.Id }, click: function(){ $root.bindPopupDocLink(@doc.Id) }, event: { contextmenu: $root.bindPopupDocLink }" class="@anchorClass">
+																	@doc.Subject - @doc.DocumentNo
+																</a>														
+																 @{
+																	if(doc.Attachments.Count > 0)
+																	{
+																		foreach (var attachment in doc.Attachments)
+																			{
+																				<a href="@Url.Content("~")Download/Attachment/@attachment.CmAttachment" target="_blank"
+																				   id="attachment-@attachment.CmAttachment"
+																				   data-bind="event: { mouseover: $root.showThumbnailAttachment, mouseout: $root.hideThumbnailAttachment }" style="text-decoration: none">
+																					<i class="attach custom grey icon" style="font-size: 1em;"></i>
+																				</a>
+																			}
+																	}
+																 }
+																 <div style="padding-bottom: 10px"></div>
+																<span class="metafont" style="padding-top: 5px">@doc.IssuedDate.ToString(Standards.DateFormat)</span>
+																<br />
+																<span class="metafont">@doc.CreatedBy</span>		
+															</div>
+														</div>
+														<hr />														
+												}
+											}
+										}
+									}
+								}
+							}
+							</div>
+							<div class="col-6">
+							<div style="color:#008282; font-size: 14pt;">					
+							<a href="@Url.Content("~")PYENG0005Results/Register/2" target="_self" style="color:#008282; font-size: 14pt;text-decoration:none"><span>Corporate News 保華動態</span></a>
+							</div>						
+							<hr />
+							@{
+								if (Model != null)
+								{
+									if (Model.DocsFolder != null)
+									{
+										foreach (var docsFolder in Model.DocsFolder)
+										{				
+											if(docsFolder.Code.ToUpper() == "CORP")
+											{									
+												foreach (var doc in docsFolder.Documents)
+                                                {				
+													int processedValue = 0;
+													string borderClass = string.Empty;
+													string anchorClass = string.Empty;
+													
+										  
+													  docsFolder.ProcessedList.TryGetValue(doc.Id, out processedValue);
+													  
+													  if (processedValue > 0)
+													  {
+														borderClass = "readB";
+														anchorClass = "readA";
+													  }
+													  else
+													  {			  
+														borderClass = "unreadB";
+														anchorClass = "unreadA";
+													  }
+																									
+														<div class="normalfont @borderClass" id="btag-@doc.Id">
+															<div style="padding-left: 10px">
+																<a data-bind="attr:{id: 'docId-'+ @doc.Id }, click: function(){ $root.bindPopupDocLink(@doc.Id) }, event: { contextmenu: $root.bindPopupDocLink }" class="@anchorClass">
+																	@doc.Subject
+																</a>														
+																 @{
+																	if(doc.Attachments.Count > 0)
+																	{
+																		foreach (var attachment in doc.Attachments)
+																		{
+																			
+																				<a href="@Url.Content("~")Download/Attachment/@attachment.CmAttachment" target="_blank"
+																				   id="attachment-@attachment.CmAttachment"
+																				   data-bind="event: { mouseover: $root.showThumbnailAttachment, mouseout: $root.hideThumbnailAttachment }" style="text-decoration: none">
+																					<i class="attach custom grey icon" style="font-size: 1em;"></i>
+																				</a>
+																			}
+																	}
+																 }
+																 <div style="padding-bottom: 10px"></div>
+																<span class="metafont" style="padding-top: 5px">@doc.IssuedDate.ToString(Standards.DateFormat)</span>
+																<br />
+																<span class="metafont">@doc.CreatedBy</span>		
+														</div>	
+														</div>
+														<hr />											
+												}
+											}
+										}
+									}
+								}
+							}
+							</div>
+						</div>
+					</div>	
+				</div> 
+				<br /><br />
+				</div> 
+				
+				</div>
+				  <div class="col-xl-2 col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 5px">
+						<div class="row">						
+						<div class="col-12" style="">
+						<div class="card" style="padding: 10px;">					
+							<div style="color:#008282; font-size: 14pt;" >Useful Link 常用連結</div>				
+							<hr />
+							<div class="normalfont" >
+								<a href="http://www.pyengineering.com/" target="_blank">Corporate Website<br />集團網頁</a>
+							</div>
+							<br />
+							<div  class="normalfont" >
+								<a href="https://www.linkedin.com/company/paul-y-engineering-group" target="_blank">Corporate LinkedIn<br />集團LinkedIn</a>
+							</div>
+							<br />
+							<div  class="normalfont" >
+								<a href="https://www.youtube.com/channel/UCN8Z1Q4bA2xGuexdvxXqePg" target="_blank">Corporate Youtube Channel<br />集團YouTube頻道</a>
+							</div>
+							<br />
+							<div class="normalfont" >						
+								<a href="http://outlook.office365.com/" target="_blank">Outlook Web&nbsp;&nbsp;<img height="24px" src="@Url.Content("~")Images/PYIntranet/outlook_logo.png"/><br />網頁版Outlook</a>
+							</div>
+							<br />
+							<div class="normalfont" >
+								<a href="https://pyengineering.zoom.us/join" target="_blank">Join a Zoom Meeting&nbsp;&nbsp;<img height="24px" src="@Url.Content("~")Images/PYIntranet/zoom_logo.png"/><br />加入Zoom會議</a>
+							</div>
+							<br />
+							<div class="normalfont" >
+								<a href="https://pyengineering.zoom.us/start/videomeeting" target="_blank">Host a Zoom Meeting&nbsp;&nbsp;<img height="24px" src="@Url.Content("~")Images/PYIntranet/zoom_logo.png"/><br />啟動Zoom會議</a>
+							</div>
+							<br />
+							<div class="normalfont" >
+								<a href="@Url.Content("~")STAND0128" target="_self">Switch PMIS Projects<br />切換PMIS項目</a>
+							</div>
+							<br />
+							<div class="normalfont" >
+								<a href="@Url.Content("~")PYENG0005iFrame/Index/1" target="_self">Room Booking Status<br />會議室預約狀況</a>
+							</div>
+							<br />
+							<div class="normalfont" >
+								<a href="https://tms.pyengineering.com/" target="_blank">Timesheet Management System<br />工時管理系統</a>
+							</div>
+						</div>
+						</div>
+						</div>
+						<div class="row">		
+						<div class="col-12" style="">
+						<div class="card" style="padding: 10px;">					
+							<div style="color:#008282; font-size: 14pt;" >Quick Access 快速存取</div>				
+							<hr />
+							<div style="padding-left: 5px; padding-right: 5px">																
+								<a class="btn btn-success" href="@Url.Content("~")PYENG0005Results/GetRegister/217" role="button" style="width: 100%; margin-bottom: 5px;: 5px">HO Petty Cash<br />寫字樓零用金申請</a> 
+								<a class="btn btn-success" href="@Url.Content("~")PYENG0005Results/GetRegister/218" role="button"style="width: 100%; margin-bottom: 5px;: 5px">Site Petty Cash<br />地盤零用金申請</a>								
+								<a class="btn btn-success" href="@Url.Content("~")PYENG0005Results/GetRegister/215" role="button"style="width: 100%; margin-bottom: 5px;: 5px">Name Card Requisition<br />名片申請</a>								
+								<a class="btn btn-success" href="@Url.Content("~")PYENG0005Results/GetRegister/158" role="button"style="width: 100%; margin-bottom: 5px;: 5px">MIS Requisition<br />電腦設備申請</a>
+								<a class="btn btn-success" href="@Url.Content("~")PYENG0005Results/GetRegister/425" role="button"style="width: 100%; margin-bottom: 5px;: 5px">Manpower Requisition<br />招聘要求</a>
+								<hr />								
+								<a class="btn btn-primary" href="@Url.Content("~")PYENG0005Results/Register/13" role="button"style="width: 100%; margin-bottom: 5px;: 5px">Company Telephone List<br />公司電話簿</a>
+								<a class="btn btn-primary" href="https://portal.pyengineering.com/PMIS/Download/Attachment/128493" role="button"style="width: 100%; margin-bottom: 5px;: 5px">Staff Movement<br />員工到任及離任</a>
+								<hr />
+								<a class="btn btn-warning" href="@Url.Content("~")Download/Attachment/40582" role="button"style="width: 100%; margin-bottom: 5px;: 5px">eForm Application Guide <br />電子表格申請指南</a>
+								<a class="btn btn-warning" href="@Url.Content("~")Download/Attachment/40583" role="button"style="width: 100%; margin-bottom: 5px;: 5px">eForm Approval Guide<br />電子表格批核指南</a>
+								<hr />
+								<a class="btn btn-info" href="@Url.Content("~")SetSignature" role="button"style="width: 100%; margin-bottom: 5px;: 5px">Set an eSignature<br />設定電子簽名</a>
+								<a class="btn btn-info" href="@Url.Content("~")UploadPhoto" role="button"style="width: 100%; margin-bottom: 5px; 5px">Set a Profile Pic<br />設定個人頭像</a>
+								<a class="btn btn-info" href="@Url.Content("~")SetLanguage" role="button"style="width: 100%; margin-bottom: 5px; 5px">Select Language<br />設置系統語言</a>
+							</div>
+						</div>
+						</div>
+						
+						</div>
+					</div>
+				</div>
+				  
+	
+				  </div>
+				
+				  </div>
+				  </div>
+				<!-- </div> -->
+			@Html.Partial("_DocumentOption")
+		</div>
+	</div>
+	<br />
+</div>
+
+@section pageScripts
+{
+    @Html.Partial("_PageJs")
+	
+    <script type="text/javascript">
+        var ProjectId = @ViewBag.ProjectId;
+        var SelectedProjectText = '@ViewBag.SelectedProjectText';
+        projectionPage.strings.add('ReadText', '@Language.Get("Read")');
+        projectionPage.strings.add('UnreadText', '@Language.Get("Unread")');
+    </script>
+
+    @Scripts.Render("~/js/plugins/PYENG0005")
+}
+
+<script type="text/javascript" src="@Url.Content("~")Scripts/marquee/jquery.marquee.min.js"></script>
+<script type="text/javascript" src="@Url.Content("~")Scripts/lightbox/js/lightbox.js"></script>
+<link rel="stylesheet" href="@Url.Content("~")Scripts/lightbox/css/lightbox.css" type="text/css" media="screen" />
+	
+<script>
+		$(document).ready(function ($) {
+			var today = new Date();
+			var weekday = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+			var months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+	
+			$('#pyedate').html(today.getDate());
+			$('#pyemonth').html(months[today.getMonth()]);
+			$('#pyeweek').html(weekday[today.getDay()]);
+			
+			var hkourl= 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=en';
+			$.ajax({
+				type: "GET",
+				url: hkourl,
+				dataType: 'json'
+			}).done(function (data) {
+				$('#w_d_v').html(data.temperature.data[1].value+"&#8451;");			
+				$('#w_h_v').html(data.humidity.data[0].value+"%");			
+			});
+			
+			$.getJSON( "@Url.Content("~")Content/PYNews/pynews.json?nocache=202109101034", function(obj) {
+			  var data = obj.links;
+			  $.each(data, function(key, value) {						
+					$('#newsfeed').append('<a href="' + value.url + '" target="_blank">' + value.title + '</a>' + "&emsp;&emsp;&emsp;&emsp;");
+			  });
+			 });
+		 
+			 
+			var url2 = 'https://rthk.hk/rthk/news/rss/c_expressnews_clocal.xml';
+			$.ajax({
+			  type: 'GET',
+			  url: "https://api.rss2json.com/v1/api.json?rss_url=" + url2,
+			  dataType: 'jsonp',
+			  success: function(data) {
+			  
+				$.each(data.items, function( k, v ) {	
+					$('#newsfeed').append(v.title + "&emsp;&emsp;&emsp;&emsp;");					
+				});		
+				
+				$('.marquee').marquee({
+						speed: 60,
+						delayBeforeStart: 500,
+						direction: 'left',
+						pauseOnHover: true
+				});
+			  }
+			});
+					
+			lightbox.option({
+			  'resizeDuration': 200,
+			  'wrapAround': true
+			})
+		});	
+</script>

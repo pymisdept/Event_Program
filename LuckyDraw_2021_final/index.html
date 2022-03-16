@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Random</title>
+    <link rel="stylesheet" href="css/firework.css?timestamp=201902011506"/>
+    <link rel="stylesheet" href="css/style.css?timestamp=202101111100"/>
+    <link rel="stylesheet" href="css/animate_v3.7.css?timestamp=201901251505"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+	
+    <script src="js/lib/jquery-1.12.4.min.js"></script>
+    <script src="js/lib/common.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/index.js?timestamp=201902121354"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/lib/xlsx.core.min.js"></script>  
+    <script src="js/consolelog.js"></script>  
+    <script src="js/timer.js"></script>
+    
+	<script>
+	$(window).on('beforeunload', function(e) {
+		writeToFile();
+		return 'Confirm to exit？';
+	});
+	</script>	
+	
+	<style>
+
+	input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
+.custom-file-upload {
+   <!-- border: 1px solid #ccc; -->
+    display: inline-block;
+    cursor: pointer;
+	color: grey;
+}
+
+body{
+	background-repeat: no-repeat;
+    <!-- background-size: 1360px 768px;  -->
+}
+
+.bigdiv {
+    position: absolute;
+    width: 325px;
+    height: 340px;
+    text-align: center;
+    padding-left: 746px;
+    padding-top: 42px;
+}
+
+.bigdiv2 {
+    position: absolute;
+    width: 31px;
+    height: 17px;
+    text-align: center;
+    padding-left: 1014px;
+    padding-top: 365px;
+}
+
+
+.bigdiv img {
+    margin-left: -10px;
+}
+
+#a1 {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
+#la1 {
+	display: none;
+    position: absolute;
+    width: 40px;
+    height: 17px;
+}
+
+input:checked + label {
+  background: blue;
+}
+
+input:checked + label:after {
+ background: blue;
+}
+
+label:active:after {
+  width: 130px;
+}
+
+#inner {
+  <!-- width: 50%; -->
+  margin: 0 auto;
+}
+
+input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #fcfcfc;
+}
+
+#loading {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  display: block;
+  opacity: 0.8;
+  background-color: #fff;
+  z-index: 99;
+  text-align: center;
+}
+
+#loading-image {
+  position: absolute;
+  top: 35%;
+  left: 40%;
+  z-index: 100;
+}
+
+.txb {
+	background-color: #ffe6e6 !important;
+	color: #374045 !important;
+	font-size: 24pt;
+	text-align:center;	
+}
+
+.textbox_height {
+	height: 55px; 
+}
+
+	</style>
+</head>
+<body>
+<div class="layer">
+	<!-- <div id="bgLuckyDrawEnd"></div> -->
+	<section>
+		<br />
+		<div class="container" style="text-align:center; width: 1200px;  max-width: 1200px;">
+			<div class="row align-items-center h-100">
+				<div class="col">
+					
+				</div>
+			</div>
+		</div>	
+	</section>
+	<div id="mainContent" class="container" style="text-align:center; max-width: 1400px; display:none;">
+		<div class="row align-items-center h-100">
+			<div id="numberPrize" style="padding-left: 1350px;padding-top: 16px;font-size: 2rem;"></div>
+			<div class="col-6" id="winnerBox" style="margin-top: 40px;">
+				<div id="outer">
+					<div id="inner">
+						<div class="container">
+							<div class="row">
+								<div class="col-12" id="col_t01">
+									<input type="text" class="txb textbox_height" id="t01" style="height: 70px;" readonly="" value="">
+								</div>
+								<div class="col-12" id="col_t02">
+									<input type="text" class="txb textbox_height" id="t02" style="height: 70px;" readonly="" value="">
+								</div>
+								<div class="col-12" id="col_t03">
+									<input type="text" class="txb textbox_height" id="t03" style="height: 70px;" readonly="" value="">
+								</div>
+								<div class="col-12" id="col_t04">
+									<input type="text" class="txb textbox_height" id="t04" style="height: 70px;" readonly="" value="">
+								</div>
+								<div class="col-12" id="col_t05">
+									<input type="text" class="txb textbox_height" id="t05" style="height: 70px;" readonly="" value="">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-6" id="winnerBox2" style="margin-top: 40px;">
+				<div id="outer2">
+					<div id="inner2">
+						<div class="container">
+							<div class="row">
+								<div class="col-12" id="col_t06">
+									<input type="text" class="txb textbox_height" id="t06" style="height: 70px;" readonly="" value="">
+								</div>
+								<div class="col-12" id="col_t07">
+									<input type="text" class="txb textbox_height" id="t07" style="height: 70px;" readonly="" value="">
+								</div>
+								<div class="col-12" id="col_t08">
+									<input type="text" class="txb textbox_height" id="t08" style="height: 70px;" readonly="" value="">
+								</div>
+								<div class="col-12" id="col_t09">
+									<input type="text" class="txb textbox_height" id="t09" style="height: 70px;" readonly="" value="">
+								</div>
+								<div class="col-12" id="col_t10">
+									<input type="text" class="txb textbox_height" id="t10" style="height: 70px;" readonly="" value="">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br/>
+    <footer id="footer_zone" style="margin-top: 50px">
+		<div>
+			
+		</div>
+		
+			<!-- <input type="text" id="t01" style=" height: 80px;font-size: 18pt;text-align:center;" readonly value="" /> -->
+			<!-- <input type="text" id="t02" style=" height: 80px;font-size: 18pt;text-align:center;" readonly value="" /> -->
+			<!-- <input type="text" id="t03" style=" height: 80px;font-size: 18pt;text-align:center;" readonly value="" /> -->
+			<!-- <input type="text" id="t04" style=" height: 80px;font-size: 18pt;text-align:center;" readonly value="" /> -->
+			<!-- <input type="text" id="t05" style=" height: 80px;font-size: 18pt;text-align:center;" readonly value="" /> -->
+			<!-- <input type="text" id="t06" style=" height: 80px;font-size: 18pt;text-align:center;" readonly value="" /> -->
+			<!-- <input type="text" id="t07" style=" height: 80px;font-size: 18pt;text-align:center;" readonly value="" /> -->
+			<!-- <input type="text" id="t08" style=" height: 80px;font-size: 18pt;text-align:center;" readonly value="" /> -->
+			<!-- <input type="text" id="t09" style=" height: 80px;font-size: 18pt;text-align:center;" readonly value="" /> -->
+			<!-- <input type="text" id="t10" style=" height: 80px;font-size: 18pt;text-align:center;" readonly value="" /> -->
+		<div id="loading">
+		  <img id="loading-image" src="css/img/loading.gif" alt="Loading..." />
+		  <div id='finalist' style="display:none; font-size: 50pt; position: absolute; top: 25%; left: 45%; color: rebeccapurple;"></div>
+		</div>
+			<br />
+        <div style="margin-top: 320px;">
+            <button id="btnStart" style="height: 150px; width: 150px; border-radius: 50%;">Start</button>
+            <!--<button id="btnReset">&nbsp;</button>-->
+        </div>
+		
+		
+    </footer>
+</div>
+<div style="top: 35%; left: 35%;position: absolute; display: none" id="resultBox">
+	<img src="css/img/result.png" width="600px" />
+</div>
+<span style="top: 0; right: 0;position: absolute;"><label for="btnFile" class="custom-file-upload"> 更新列表
+			</label>
+            <input type="file" id="btnFile" name="files"/></span>
+</body>
+</html>
